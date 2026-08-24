@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Scalper & Fundamental Terminal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="terminal-container">
+    <!-- HEADER & MARKET STATUS -->
+    <header class="terminal-header">
+      <div class="logo">
+        <span class="logo-icon">⚡</span> AI SCALPER TERMINAL
+      </div>
+      <div class="market-status" id="marketStatus">
+        <span class="dot"></span> MARKET STATUS: CHECKING...
+      </div>
+    </header>
+
+    <!-- SEARCH & EMITEN SELECTOR -->
+    <section class="search-section">
+      <label for="stockSearch">CARI / PILIH EMITEN IHSG (ALL STOCKS):</label>
+      <div class="search-box-wrapper">
+        <input type="text" id="stockSearch" placeholder="Ketik kode/nama saham (misal: CASH, BBRI, ANTM)..." autocomplete="off">
+        <div id="searchResults" class="search-dropdown"></div>
+      </div>
+    </section>
+
+    <!-- DEEP FOCUS DISPLAY (1 SAHAM) -->
+    <main class="focus-dashboard">
+      
+      <!-- TOP MODULE: SCALPING & HAKA/HAKI ENGINE -->
+      <div class="card scalping-card">
+        <div class="card-title">DEEP FOCUS SCALPING SIGNAL</div>
+        
+        <div id="signalBadge" class="signal-badge haka">
+          🔥 HAKA (BUY)
+        </div>
+
+        <div class="metrics-main">
+          <div id="percentValue" class="percent-val">+0.0%</div>
+          <div id="percentLabel" class="percent-lbl">BUY PRESSURE (DOMINASI)</div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="m-item">
+            <span class="m-label">Running Price</span>
+            <span id="mPrice" class="m-val">-</span>
+          </div>
+          <div class="m-item">
+            <span class="m-label">Velocity Score</span>
+            <span id="mVelocity" class="m-val">-</span>
+          </div>
+          <div class="m-item">
+            <span class="m-label">Impuls Power</span>
+            <span id="mImpulse" class="m-val">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM MODULE: AI FUNDAMENTAL REASONING -->
+      <div class="card fundamental-card">
+        <div class="card-title">📊 AI FUNDAMENTAL REASONING</div>
+        
+        <div class="stock-active-header">
+          <span id="activeCode" class="active-code">SELECT STOCK</span>
+          <span id="activeName" class="active-name">Pilih emiten untuk memulai analisis</span>
+        </div>
+
+        <div class="f-grid">
+          <div class="f-item">
+            <span class="f-label">Health & Profitability:</span>
+            <span id="fHealth" class="f-val">-</span>
+          </div>
+          <div class="f-item">
+            <span class="f-label">Valuasi (PER / PBV):</span>
+            <span id="fValuation" class="f-val">-</span>
+          </div>
+          <div class="f-item">
+            <span class="f-label">Risk Level:</span>
+            <span id="fRisk" class="f-val">-</span>
+          </div>
+        </div>
+
+        <div class="ai-insight-box">
+          <div class="ai-title">🤖 AI Reasoning & Decision:</div>
+          <p id="aiInsightText">Sistem siap. Silakan pilih salah satu emiten IHSG pada kolom pencarian di atas.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
