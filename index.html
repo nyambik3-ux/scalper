@@ -22,14 +22,38 @@
     </div>
   </header>
 
-  <!-- ===== SEARCH ===== -->
+  <!-- ===== SEARCH & SCREENER NAV ===== -->
   <section class="search-section">
-    <label>🔍 CARI / PILIH EMITEN IHSG</label>
-    <div class="search-wrapper">
-      <input type="text" id="stockSearch" placeholder="Ketik kode atau nama saham..." autocomplete="off">
-      <div id="searchResults" class="search-dropdown"></div>
+    <div class="search-nav">
+      <div class="search-wrapper">
+        <label>🔍 CARI / PILIH EMITEN IHSG</label>
+        <input type="text" id="stockSearch" placeholder="Ketik kode atau nama saham..." autocomplete="off">
+        <div id="searchResults" class="search-dropdown"></div>
+      </div>
+      <div class="screener-nav">
+        <button id="btnScreener" class="btn-screener">📊 SCREENER</button>
+        <button id="btnTopGainer" class="btn-top">🏆 TOP GAINER</button>
+        <button id="btnTopLiquid" class="btn-liquid">💧 TOP LIKUID</button>
+      </div>
     </div>
   </section>
+
+  <!-- ===== SCREENER PANEL (HIDE BY DEFAULT) ===== -->
+  <div id="screenerPanel" class="screener-panel" style="display: none;">
+    <div class="screener-header">
+      <span class="screener-title">📊 SCREENER RESULT</span>
+      <span class="screener-badge" id="screenerCount">0 saham</span>
+      <button id="closeScreener" class="btn-close">✕</button>
+    </div>
+    <div class="screener-filters">
+      <span class="filter-tag">💰 Harga: 200 - 700</span>
+      <span class="filter-tag">📈 Gain: 5% - 17%</span>
+      <span class="filter-tag" id="filterStatus">🟢 Aktif</span>
+    </div>
+    <div id="screenerResult" class="screener-result">
+      <div class="screener-empty">🔍 Klik SCREENER untuk mulai scan...</div>
+    </div>
+  </div>
 
   <!-- ===== DASHBOARD (2 KOLOM) ===== -->
   <div class="dashboard-grid">
@@ -67,7 +91,7 @@
         </div>
       </div>
 
-      <!-- SPARKLINE (mini chart) -->
+      <!-- SPARKLINE -->
       <div class="sparkline-container">
         <canvas id="sparkline" width="280" height="40"></canvas>
       </div>
@@ -121,7 +145,7 @@
 
   </div>
 
-  <!-- ===== SIGNAL LOG (FULL WIDTH) ===== -->
+  <!-- ===== SIGNAL LOG ===== -->
   <div class="card log-card">
     <div class="card-header">
       <span class="card-title">📋 SIGNAL LOG</span>
