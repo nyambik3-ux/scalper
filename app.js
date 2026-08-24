@@ -3,7 +3,7 @@
 // ====================================================================
 
 // ===== 1. KONFIGURASI =====
-const API_KEY = 'AQ.Ab8RN6I45_g_YWkA80iFU8RaWXfugTmnbitbDsYtGPWT4Vf1OA'; // 🔑 GANTI DENGAN API KEY KAMU!
+const API_KEY = 'YPV4LEGVF6R6E70H'; // 🔑 GANTI DENGAN API KEY KAMU!
 const BASE_URL = 'https://api.stocktv.top';
 const COUNTRY_ID = 48; // Indonesia
 
