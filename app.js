@@ -1,28 +1,29 @@
 // ====================================================================
-// DATABASE IHSG EMITEN & SYSTEM ENGINE
+// AI SCALPER ENGINE - DYNAMIC EMITEN LOADER
 // ====================================================================
 
-// Sample Database Emiten IHSG (Bisa diperluas ke 800+ emiten)
-const IHSG_STOCKS = [
-  { code: "CASH", name: "PT Cashlez Worldwide Indonesia Tbk", health: "FAIR", per: "12.4x", risk: "MEDIUM", summary: "Transaksi digital meningkat. Aman scalping dengan lot terkontrol." },
-  { code: "PADI", name: "PT Minna Padi Investama Sekuritas Tbk", health: "SPECULATIVE", per: "N/A", risk: "HIGH", summary: "Saham volitilitas tinggi/gorengan. Murni trading momentum HAKA kilat." },
-  { code: "BBRI", name: "PT Bank Rakyat Indonesia (Persero) Tbk", health: "VERY STRONG", per: "11.2x", risk: "LOW", summary: "Perbankan Tier-1, dividen solid. Sangat aman HAKA skala besar." },
-  { code: "ANTM", name: "PT Aneka Tambang Tbk", health: "STRONG", per: "15.1x", risk: "LOW-MEDIUM", summary: "Sentimen komoditas nikel & emas positif. Katalis teknikal kuat." },
-  { code: "TLKM", name: "PT Telkom Indonesia Tbk", health: "VERY STRONG", per: "14.0x", risk: "LOW", summary: "Defensif bluechip, cashflow stabil. Aman untuk rebound scalping." },
-  { code: "GOTO", name: "PT GoTo Gojek Tokopedia Tbk", health: "TURNAROUND", per: "N/A", risk: "HIGH", summary: "Volatilitas tinggi, perhatikan aliran arus kas dana asing (foreign flow)." }
-];
-
+let IHSG_STOCKS = [];
 let selectedStock = null;
 
-// 1. Cek Jam Buka Pasar (IHSG Open Market Status)
+// 1. Fetch Database Saham dari File JSON
+async function loadStockDatabase() {
+  try {
+    const response = await fetch('stocks-data.json');
+    IHSG_STOCKS = await response.json();
+    console.log(`[SYSTEM] Loaded ${IHSG_STOCKS.length} emiten IHSG successfully.`);
+  } catch (error) {
+    console.error("[ERROR] Failed to load stock database:", error);
+  }
+}
+
+// 2. Cek Jam Buka Pasar (IHSG Open Market Status)
 function checkMarketStatus() {
   const now = new Date();
-  const day = now.getDay(); // 0: Mingu, 6: Sabtu
+  const day = now.getDay(); // 0: Minggu, 6: Sabtu
   const hour = now.getHours();
   
   const statusElem = document.getElementById("marketStatus");
   
-  // Sederhana: Senin-Jumat jam 09:00 - 16:00 WIB
   if (day >= 1 && day <= 5 && hour >= 9 && hour < 16) {
     statusElem.innerHTML = `<span class="dot open"></span> MARKET STATUS: 🟢 OPEN (ACTIVE)`;
   } else {
@@ -30,7 +31,7 @@ function checkMarketStatus() {
   }
 }
 
-// 2. Logic Autocomplete Search Engine
+// 3. Autocomplete Search Engine
 const searchInput = document.getElementById("stockSearch");
 const dropdown = document.getElementById("searchResults");
 
@@ -43,6 +44,7 @@ searchInput.addEventListener("input", (e) => {
     return;
   }
 
+  // Pencarian dinamis ke seluruh database
   const filtered = IHSG_STOCKS.filter(s => s.code.includes(query) || s.name.toUpperCase().includes(query));
 
   if (filtered.length > 0) {
@@ -50,7 +52,13 @@ searchInput.addEventListener("input", (e) => {
     filtered.forEach(stock => {
       const item = document.createElement("div");
       item.className = "search-item";
-      item.innerHTML = `<span class="s-code">${stock.code}</span><span class="s-name">${stock.name}</span>`;
+      item.innerHTML = `
+        <div>
+          <span class="s-code">${stock.code}</span>
+          <span class="s-name"> - ${stock.name}</span>
+        </div>
+        <span style="font-size: 9px; color: #58a6ff;">${stock.sector || ''}</span>
+      `;
       item.onclick = () => selectStock(stock);
       dropdown.appendChild(item);
     });
@@ -59,13 +67,13 @@ searchInput.addEventListener("input", (e) => {
   }
 });
 
-// 3. Select Stock & Activate Deep Focus Analysis
+// 4. Pilih Saham & Aktifkan Deep Focus Module
 function selectStock(stock) {
   selectedStock = stock;
   searchInput.value = `${stock.code} - ${stock.name}`;
   dropdown.style.display = "none";
 
-  // Update Fundamental Module
+  // Update Tampilan Fundamental
   document.getElementById("activeCode").innerText = stock.code;
   document.getElementById("activeName").innerText = stock.name;
   document.getElementById("fHealth").innerText = stock.health;
@@ -73,16 +81,14 @@ function selectStock(stock) {
   document.getElementById("fRisk").innerText = stock.risk;
   document.getElementById("aiInsightText").innerText = stock.summary;
 
-  // Trigger Immediate Calculation
   processScalpingAI();
 }
 
-// 4. AI & Velocity Engine (Deep Focus Simulation)
+// 5. AI Scalping Engine (Simulation Logic)
 function processScalpingAI() {
   if (!selectedStock) return;
 
-  // Simulasi kalkulasi dinamika tick & volume ratio
-  const isHaka = Math.random() > 0.45; // Predisposisi
+  const isHaka = Math.random() > 0.45;
   const ratio = (Math.random() * (92 - 58) + 58).toFixed(1);
   const velocity = (Math.random() * (4.5 - 1.2) + 1.2).toFixed(1);
   
@@ -110,13 +116,15 @@ function processScalpingAI() {
   document.getElementById("mVelocity").innerText = `${velocity} Ticks/sec`;
 }
 
-// Loop Refresh Real-time tiap 1.5 detik jika saham dipilih
-setInterval(() => {
+// Inisialisasi & Loop Sync
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadStockDatabase();
   checkMarketStatus();
-  if (selectedStock) {
-    processScalpingAI();
-  }
-}, 1500);
-
-// Init awal
-checkMarketStatus();
+  
+  setInterval(() => {
+    checkMarketStatus();
+    if (selectedStock) {
+      processScalpingAI();
+    }
+  }, 1500);
+});
