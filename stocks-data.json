@@ -1,0 +1,22 @@
+[
+  { "code": "BBRI", "name": "Bank Rakyat Indonesia (Persero) Tbk", "sector": "Finance", "health": "VERY STRONG", "per": "11.2x", "risk": "LOW", "summary": "Perbankan Tier-1, dividen solid. Sangat aman HAKA skala besar." },
+  { "code": "BBCA", "name": "Bank Central Asia Tbk", "sector": "Finance", "health": "VERY STRONG", "per": "22.5x", "risk": "LOW", "summary": "Kualitas aset terbaik di IHSG. Likuiditas melimpah, sangat aman." },
+  { "code": "BMRI", "name": "Bank Mandiri (Persero) Tbk", "sector": "Finance", "health": "VERY STRONG", "per": "10.8x", "risk": "LOW", "summary": "Pertumbuhan kredit kuat. Penopang utama indeks bursa." },
+  { "code": "BBNI", "name": "Bank Negara Indonesia (Persero) Tbk", "sector": "Finance", "health": "STRONG", "per": "9.5x", "risk": "LOW", "summary": "Valuasi atraktif, pertumbuhan konsisten." },
+  { "code": "TLKM", "name": "Telkom Indonesia (Persero) Tbk", "sector": "Infrastruktur", "health": "VERY STRONG", "per": "14.0x", "risk": "LOW", "summary": "Defensif bluechip, cashflow stabil. Aman untuk rebound scalping." },
+  { "code": "ASII", "name": "Astra International Tbk", "sector": "Industri", "health": "STRONG", "per": "7.8x", "risk": "LOW-MEDIUM", "summary": "Diversifikasi bisnis luas. Valuasi terdiskon memikat." },
+  { "code": "ANTM", "name": "Aneka Tambang Tbk", "sector": "Basic Materials", "health": "STRONG", "per": "15.1x", "risk": "MEDIUM", "summary": "Sentimen komoditas nikel & emas positif. Katalis teknikal kuat." },
+  { "code": "INCO", "name": "Vale Indonesia Tbk", "sector": "Basic Materials", "health": "STRONG", "per": "13.2x", "risk": "MEDIUM", "summary": "Kinerjanya berkolaborasi dengan harga nikel global." },
+  { "code": "MDKA", "name": "Merdeka Copper Gold Tbk", "sector": "Basic Materials", "health": "GROWTH", "per": "N/A", "risk": "MEDIUM-HIGH", "summary": "Prospek ekspansi tambang emas & tembaga tinggi." },
+  { "code": "PGAS", "name": "Perusahaan Gas Negara Tbk", "sector": "Energy", "health": "FAIR", "per": "7.5x", "risk": "MEDIUM", "summary": "Arus kas dividen tinggi, perhatikan regulasi harga gas." },
+  { "code": "PTBA", "name": "Bukit Asam Tbk", "sector": "Energy", "health": "STRONG", "per": "5.4x", "risk": "MEDIUM", "summary": "Raja dividen energi. Sangat menarik untuk swing/scalping momentum." },
+  { "code": "ADRO", "name": "Adaro Energy Indonesia Tbk", "sector": "Energy", "health": "STRONG", "per": "4.8x", "risk": "MEDIUM", "summary": "Balance sheet tebal, aliran kas operasional sangat solid." },
+  { "code": "ITMG", "name": "Indo Tambangraya Megah Tbk", "sector": "Energy", "health": "STRONG", "per": "6.1x", "risk": "MEDIUM", "summary": "Cash cow perusahaan batu bara dengan yield dividen jumbo." },
+  { "code": "GOTO", "name": "GoTo Gojek Tokopedia Tbk", "sector": "Technology", "health": "TURNAROUND", "per": "N/A", "risk": "HIGH", "summary": "Volatilitas tinggi, perhatikan arus kas dana asing (foreign flow)." },
+  { "code": "EMTK", "name": "Elang Mahkota Teknologi Tbk", "sector": "Technology", "health": "FAIR", "per": "18.2x", "risk": "MEDIUM-HIGH", "summary": "Ekosistem media & teknologi. Penggerak momentum cepat." },
+  { "code": "CASH", "name": "Cashlez Worldwide Indonesia Tbk", "sector": "Technology", "health": "FAIR", "per": "12.4x", "risk": "MEDIUM", "summary": "Transaksi digital meningkat. Aman scalping dengan lot terkontrol." },
+  { "code": "PADI", "name": "Minna Padi Investama Sekuritas Tbk", "sector": "Finance", "health": "SPECULATIVE", "per": "N/A", "risk": "HIGH", "summary": "Saham volatilitas tinggi/gorengan. Murni trading momentum HAKA kilat." },
+  { "code": "AMMN", "name": "Amman Mineral Internasional Tbk", "sector": "Basic Materials", "health": "STRONG", "per": "32.0x", "risk": "MEDIUM", "summary": "Kapitalisasi pasar besar, penggerak utama IHSG." },
+  { "code": "BREN", "name": "Barito Renewables Energy Tbk", "sector": "Infrastructure", "health": "GROWTH", "per": "HIGH", "risk": "HIGH", "summary": "Energi terbarukan. Volatilitas super tinggi untuk scalper berpengalaman." },
+  { "code": "CUAN", "name": "Petrindo Jaya Kreasi Tbk", "sector": "Energy", "health": "SPECULATIVE", "per": "HIGH", "risk": "VERY HIGH", "summary": "Pergerakan harga ekstrem, murni permainan impuls & running trade." }
+]
