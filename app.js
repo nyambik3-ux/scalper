@@ -341,4 +341,44 @@ function drawSparkline(data) {
   ctx.fill();
   
   const lastX = w;
-  const lastY = h - padding - ((data[data.length-1] - min) / range
+  const lastY = h - padding - ((data[data.length-1] - min) / range) * (h - padding * 2);
+  ctx.beginPath();
+  ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
+  ctx.fillStyle = data[data.length-1] > data[0] ? '#00c897' : '#ff5470';
+  ctx.fill();
+}
+
+// ===== 12. CLEAR LOG =====
+if (clearLogBtn) {
+  clearLogBtn.addEventListener("click", () => {
+    signalLog.innerHTML = '<div class="log-empty">Log dibersihkan</div>';
+    setTimeout(() => {
+      if (signalLog.children.length === 1 && signalLog.children[0].classList.contains('log-empty')) {
+        signalLog.innerHTML = '<div class="log-empty">Belum ada sinyal...</div>';
+      }
+    }, 1500);
+  });
+}
+
+// ===== 13. INIT =====
+async function init() {
+  console.log('🚀 AI Scalper Terminal v3.0 (Yahoo Finance)');
+  console.log(`📊 ${IHSG_STOCKS.length} emiten IHSG terload.`);
+  console.log('📌 Data dari Yahoo Finance (delay 10-15 menit)');
+}
+
+init();
+
+// ===== 14. DEFAULT STATE =====
+activeCode.textContent = "SELECT";
+activeName.textContent = "Pilih emiten untuk memulai";
+fHealth.textContent = "-";
+fValuation.textContent = "-";
+fRisk.textContent = "-";
+slValue.textContent = "-";
+tpValue.textContent = "-";
+lotValue.textContent = "-";
+aiInsightText.textContent = "Sistem siap. Silakan pilih salah satu emiten IHSG.";
+drawSparkline([]);
+
+console.log('✅ Siap!');
