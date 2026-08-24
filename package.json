@@ -1,0 +1,10 @@
+{
+  "name": "scalper-terminal",
+  "version": "1.0.0",
+  "description": "AI Scalper Terminal with Yahoo Finance",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {}
+}
