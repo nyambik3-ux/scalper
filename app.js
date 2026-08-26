@@ -1,5 +1,6 @@
 // ====================================================================
-// AI SCALPER TERMINAL - v6.0 DENGAN SCREENER
+// AI SCALPER TERMINAL - FULL v8.0
+// Fitur: Screener | O=L/O=H | Proxy CORS | SL/TP Otomatis
 // ====================================================================
 
 // ===== 1. STATE =====
@@ -54,7 +55,7 @@ const screenerCount = document.getElementById("screenerCount");
 const closeScreener = document.getElementById("closeScreener");
 const filterStatus = document.getElementById("filterStatus");
 
-// ===== 4. LOAD DATA =====
+// ===== 4. LOAD DATA DARI JSON =====
 async function loadStockData() {
   try {
     console.log('📡 Loading stocks-data.json...');
@@ -84,7 +85,39 @@ async function loadStockData() {
   }
 }
 
-// ===== 5. RUN SCREENER =====
+// ===== 5. FETCH HARGA VIA PROXY =====
+async function fetchRealTimePrice(symbol) {
+  try {
+    // Panggil proxy di server yang sama (CORS fix)
+    const url = `/api/quote?symbol=${symbol}`;
+    console.log(`📡 Fetching from proxy: ${url}`);
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.success && data.price > 0) {
+      return {
+        price: data.price,
+        change: data.change || 0,
+        previousClose: data.previousClose || data.price,
+        volume: data.volume || 0
+      };
+    } else {
+      throw new Error(data.error || 'Data tidak valid');
+    }
+    
+  } catch (error) {
+    console.error(`❌ Gagal fetch ${symbol}:`, error.message);
+    return null;
+  }
+}
+
+// ===== 6. RUN SCREENER =====
 async function runScreener() {
   if (!isDataLoaded || IHSG_STOCKS.length === 0) {
     screenerResult.innerHTML = '<div class="screener-empty">⏳ Data masih loading...</div>';
@@ -93,7 +126,6 @@ async function runScreener() {
 
   screenerResult.innerHTML = '<div class="screener-empty">⏳ Scanning saham...</div>';
   
-  // Filter: Harga 200-700, Gain 5-17%
   const filtered = [];
   const safeList = [];
   
@@ -105,7 +137,7 @@ async function runScreener() {
         const change = data.change;
         const volume = data.volume || 0;
         
-        // Cek range harga 200-700 DAN gain 5-17%
+        // Filter: harga 200-700 DAN gain 5-17%
         if (price >= 200 && price <= 700 && change >= 5 && change <= 17) {
           filtered.push({
             ...stock,
@@ -115,7 +147,6 @@ async function runScreener() {
           });
         }
         
-        // Simpan data untuk safe list
         safeList.push({
           ...stock,
           price: price,
@@ -128,19 +159,14 @@ async function runScreener() {
     }
   }
   
-  // Urutkan berdasarkan gain tertinggi
   filtered.sort((a, b) => b.change - a.change);
-  
-  // Simpan screener data
   screenerData = filtered;
   
-  // Tampilkan hasil
   if (filtered.length > 0) {
     renderScreenerResults(filtered, '🏆 TOP GAINER (200-700)');
     screenerCount.textContent = `${filtered.length} saham`;
     filterStatus.textContent = `🟢 ${filtered.length} ditemukan`;
   } else {
-    // Tampilkan daftar teraman (Top 5 most liquid)
     safeList.sort((a, b) => b.volume - a.volume);
     const safeTop = safeList.slice(0, 10);
     renderScreenerResults(safeTop, '💧 TOP LIKUID (Safe List)');
@@ -149,7 +175,7 @@ async function runScreener() {
   }
 }
 
-// ===== 6. RENDER SCREENER =====
+// ===== 7. RENDER SCREENER =====
 function renderScreenerResults(data, title) {
   if (!data || data.length === 0) {
     screenerResult.innerHTML = `<div class="screener-empty">❌ Tidak ada saham yang memenuhi filter</div>`;
@@ -158,7 +184,7 @@ function renderScreenerResults(data, title) {
   
   let html = `<div style="font-size:9px;color:#4a5568;padding:4px 10px;border-bottom:1px solid #1a1f28;">${title}</div>`;
   
-  data.forEach((item, index) => {
+  data.forEach((item) => {
     const changeClass = item.change >= 0 ? 'up' : 'down';
     const changeSign = item.change >= 0 ? '+' : '';
     
@@ -176,19 +202,18 @@ function renderScreenerResults(data, title) {
   screenerResult.innerHTML = html;
 }
 
-// ===== 7. SELECT STOCK BY CODE (dari screener) =====
+// ===== 8. SELECT STOCK BY CODE =====
 window.selectStockByCode = function(code) {
   const stock = IHSG_STOCKS.find(s => s.code === code);
   if (stock) {
     selectStock(stock);
-    // Tutup screener
     screenerPanel.style.display = 'none';
     isScreenerVisible = false;
     btnScreener.classList.remove('active');
   }
 };
 
-// ===== 8. CLOCK =====
+// ===== 9. CLOCK =====
 function updateClock() {
   const now = new Date();
   const wib = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -197,7 +222,7 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// ===== 9. MARKET STATUS =====
+// ===== 10. MARKET STATUS =====
 function checkMarketStatus() {
   const now = new Date();
   const day = now.getDay();
@@ -215,7 +240,7 @@ function checkMarketStatus() {
 setInterval(checkMarketStatus, 5000);
 checkMarketStatus();
 
-// ===== 10. SEARCH =====
+// ===== 11. SEARCH =====
 searchInput.addEventListener("input", (e) => {
   const query = e.target.value.toUpperCase().trim();
   dropdown.innerHTML = "";
@@ -246,46 +271,12 @@ searchInput.addEventListener("input", (e) => {
   }
 });
 
-// ===== 11. FORMAT PRICE =====
+// ===== 12. FORMAT PRICE =====
 function formatPrice(price) {
   if (!price || price === 0) return "Rp -";
   return "Rp " + Math.round(price).toLocaleString('id-ID');
 }
 
-// ===== FETCH HARGA VIA PROXY =====
-async function fetchRealTimePrice(symbol) {
-  try {
-    // Panggil proxy kita sendiri (bukan langsung Yahoo)
-    const url = `/api/quote?symbol=${symbol}`;
-    console.log(`📡 Fetching from proxy: ${url}`);
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    if (data.success && data.price > 0) {
-      return {
-        price: data.price,
-        change: data.change || 0,
-        previousClose: data.previousClose || data.price,
-        volume: data.volume || 0,
-        open: data.open || data.price,
-        high: data.high || data.price,
-        low: data.low || data.price
-      };
-    } else {
-      throw new Error(data.error || 'Data tidak valid');
-    }
-    
-  } catch (error) {
-    console.error(`❌ Gagal fetch ${symbol}:`, error.message);
-    return null;
-  }
-}
 // ===== 13. DETEKSI O=L / O=H =====
 function detectStrategy(open, high, low, current) {
   const isOpenLow = open === low;
@@ -379,9 +370,9 @@ async function fetchAndUpdatePrice() {
     
     if (data && data.price > 0) {
       currentPrice = data.price;
-      openPrice = data.open || currentPrice;
-      highPrice = data.high || currentPrice;
-      lowPrice = data.low || currentPrice;
+      openPrice = currentPrice;
+      highPrice = currentPrice;
+      lowPrice = currentPrice;
       
       priceHistory.push(currentPrice);
       if (priceHistory.length > 30) priceHistory.shift();
@@ -391,7 +382,7 @@ async function fetchAndUpdatePrice() {
       
       // ===== UPDATE UI =====
       mPrice.textContent = formatPrice(currentPrice);
-      mPrice.style.color = data.change >= 0 ? "#00c897" : "#ff5470";
+      mPrice.style.color = data.change >= 0 ? "#00d4a0" : "#ff5470";
       setTimeout(() => mPrice.style.color = "", 600);
       
       const pressure = Math.min(Math.abs(data.change) * 2 + 30, 90);
@@ -439,7 +430,7 @@ async function fetchAndUpdatePrice() {
       
       // ===== AI INSIGHT =====
       let insightText = `📊 ${selectedStock.name}\n`;
-      insightText += `Open: ${formatPrice(openPrice)} | High: ${formatPrice(highPrice)} | Low: ${formatPrice(lowPrice)}\n`;
+      insightText += `Harga: ${formatPrice(currentPrice)}\n`;
       insightText += `\n${strategy.message}`;
       
       if (strategy.status === 'valid') {
@@ -546,7 +537,7 @@ function drawSparkline(data) {
   ctx.stroke();
   
   ctx.beginPath();
-  ctx.strokeStyle = data[data.length-1] > data[0] ? '#00c897' : '#ff5470';
+  ctx.strokeStyle = data[data.length-1] > data[0] ? '#00d4a0' : '#ff5470';
   ctx.lineWidth = 2;
   
   data.forEach((val, i) => {
@@ -557,7 +548,7 @@ function drawSparkline(data) {
   ctx.stroke();
   
   const gradient = ctx.createLinearGradient(0, 0, 0, h);
-  gradient.addColorStop(0, data[data.length-1] > data[0] ? 'rgba(0,200,151,0.15)' : 'rgba(255,84,112,0.15)');
+  gradient.addColorStop(0, data[data.length-1] > data[0] ? 'rgba(0,212,160,0.15)' : 'rgba(255,84,112,0.15)');
   gradient.addColorStop(1, 'rgba(0,0,0,0)');
   ctx.fillStyle = gradient;
   ctx.beginPath();
@@ -575,7 +566,7 @@ function drawSparkline(data) {
   const lastY = h - padding - ((data[data.length-1] - min) / range) * (h - padding * 2);
   ctx.beginPath();
   ctx.arc(lastX, lastY, 3, 0, Math.PI * 2);
-  ctx.fillStyle = data[data.length-1] > data[0] ? '#00c897' : '#ff5470';
+  ctx.fillStyle = data[data.length-1] > data[0] ? '#00d4a0' : '#ff5470';
   ctx.fill();
 }
 
@@ -617,7 +608,6 @@ btnTopLiquid.addEventListener("click", () => {
   isScreenerVisible = true;
   btnScreener.classList.add('active');
   
-  // Tampilkan top 10 saham dengan volume tertinggi
   if (IHSG_STOCKS.length > 0) {
     const safeList = IHSG_STOCKS.slice(0, 10);
     renderScreenerResults(safeList, '💧 TOP 10 LIKUID (Safe List)');
@@ -634,9 +624,9 @@ closeScreener.addEventListener("click", () => {
 
 // ===== 19. INIT =====
 async function init() {
-  console.log('🚀 AI Scalper Terminal v6.0 - Screener + O=L/O=H');
+  console.log('🚀 AI Scalper Terminal v8.0 - Full Version');
   await loadStockData();
-  console.log('📋 Fitur: Screener | O=L/O=H Detection | SL/TP Otomatis');
+  console.log('📋 Fitur: Screener | O=L/O=H | Proxy CORS | SL/TP Otomatis');
   
   // Default state
   activeCode.textContent = "SELECT";
