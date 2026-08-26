@@ -252,10 +252,13 @@ function formatPrice(price) {
   return "Rp " + Math.round(price).toLocaleString('id-ID');
 }
 
-// ===== 12. FETCH REAL PRICE =====
+// ===== FETCH HARGA VIA PROXY =====
 async function fetchRealTimePrice(symbol) {
   try {
-    const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}.JK`;
+    // Panggil proxy kita sendiri (bukan langsung Yahoo)
+    const url = `/api/quote?symbol=${symbol}`;
+    console.log(`📡 Fetching from proxy: ${url}`);
+    
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -264,29 +267,25 @@ async function fetchRealTimePrice(symbol) {
     
     const data = await response.json();
     
-    if (data.chart && data.chart.result && data.chart.result.length > 0) {
-      const meta = data.chart.result[0].meta;
-      const price = meta.regularMarketPrice || 0;
-      const previousClose = meta.previousClose || price;
-      const changePercent = ((price - previousClose) / previousClose) * 100;
-      
+    if (data.success && data.price > 0) {
       return {
-        price: price,
-        change: changePercent,
-        previousClose: previousClose,
-        volume: meta.regularMarketVolume || 0,
-        open: meta.regularMarketOpen || price,
-        high: meta.regularMarketDayHigh || price,
-        low: meta.regularMarketDayLow || price
+        price: data.price,
+        change: data.change || 0,
+        previousClose: data.previousClose || data.price,
+        volume: data.volume || 0,
+        open: data.open || data.price,
+        high: data.high || data.price,
+        low: data.low || data.price
       };
+    } else {
+      throw new Error(data.error || 'Data tidak valid');
     }
-    throw new Error('Data tidak ditemukan');
+    
   } catch (error) {
     console.error(`❌ Gagal fetch ${symbol}:`, error.message);
     return null;
   }
 }
-
 // ===== 13. DETEKSI O=L / O=H =====
 function detectStrategy(open, high, low, current) {
   const isOpenLow = open === low;
